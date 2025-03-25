@@ -18,7 +18,7 @@ public class User {
     @Column(unique = true, nullable = false, length = 12)
     private String username; // username은 nuique null 불가
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 12)
     private String password;
 
     @Column(nullable = false)

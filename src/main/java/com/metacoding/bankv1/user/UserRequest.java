@@ -1,6 +1,5 @@
 package com.metacoding.bankv1.user;
 
-
 import lombok.Data;
 
 // 데이터를 클래스로 받기

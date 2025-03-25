@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-public class UserServeice {
+public class UserService {
     private final UserRepository userRepository;
 
     // 회원가입
@@ -19,4 +19,21 @@ public class UserServeice {
         // 3. 없으면 회원가입하기
         userRepository.save(joinDTO.getUsername(), joinDTO.getPassword(), joinDTO.getFullname());
     }
+
+    public User 로그인(UserRequest.LoginDTO loginDTO) {
+        // 1. 해당 username이 있나?
+        User user = userRepository.findByUsername(loginDTO.getUsername());
+
+        // 2. 필터링 (username, password가 불일치하는 것들)
+        if (user == null) {
+            throw new RuntimeException("해당 Username이 없습니다");
+        }
+
+        if (!(user.getPassword().equals(loginDTO.getPassword()))) {
+            throw new RuntimeException("해당 Password가 틀렸습니다");
+        }
+        return user;
+    }
+
+
 }

@@ -20,8 +20,6 @@ public class UserRepository {
         } catch (Exception e) {
             return null;
         }
-
-
     }
 
     public void save(String username, String password, String fullname) {
