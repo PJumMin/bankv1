@@ -20,6 +20,7 @@ public class UserService {
         userRepository.save(joinDTO.getUsername(), joinDTO.getPassword(), joinDTO.getFullname());
     }
 
+    // 로그인
     public User 로그인(UserRequest.LoginDTO loginDTO) {
         // 1. 해당 username이 있나?
         User user = userRepository.findByUsername(loginDTO.getUsername());

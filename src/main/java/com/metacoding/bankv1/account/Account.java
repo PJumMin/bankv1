@@ -20,5 +20,4 @@ public class Account {
     private String balance; // 잔액
     private Integer userId; // FK
     private Timestamp createdAt; // 생성 날짜 (insert 된 시간)
-
 }

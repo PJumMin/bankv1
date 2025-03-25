@@ -1,13 +1,54 @@
 package com.metacoding.bankv1.account;
 
+import com.metacoding.bankv1.user.User;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
+@RequiredArgsConstructor
 @Controller
 public class AccountController {
+    private final AccountService accountService;
+    private final HttpSession session;
 
     @GetMapping("/")
     public String home() {
         return "home";
+    }
+
+    // 계좌생성 페이지
+    @GetMapping("/account/save-form")
+    public String saveForm() {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new RuntimeException("로그인 후 사용해주세요");
+        return "account/save-form";
+    }
+
+    // 계좌생성
+    @PostMapping("/account/save")
+    public String save(AccountRequest.SaveDTO saveDTO) {
+        // 인증체크 (로그인했는지 체크)
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new RuntimeException("로그인 후 사용해주세요");
+
+        accountService.계좌생성(saveDTO, sessionUser.getId());
+        return "redirect:/";
+    }
+
+    @GetMapping("/account")
+    public String account(HttpServletRequest request) {
+        // 인증체크 (로그인했는지 체크)
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new RuntimeException("로그인 후 사용해주세요");
+
+        List<Account> accountList = accountService.나의계좌목록(sessionUser.getId());
+        request.setAttribute("models", accountList);
+        System.out.println(sessionUser.getId());
+        return "account/list";
     }
 }
