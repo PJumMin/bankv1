@@ -12,8 +12,16 @@ import java.util.List;
 public class AccountRepository {
     private final EntityManager em;
 
+    public void updateBynumber(Integer balance, String password, Integer number) {
+        Query query = em.createNativeQuery("update account_tb set balance=?, password=? where number=?");
+        query.setParameter(1, balance);
+        query.setParameter(2, password);
+        query.setParameter(3, number);
+        query.executeUpdate();
+    }
+
     public void save(Integer number, String password, Integer balance, int userId) {
-        Query query = em.createNativeQuery("insert into account_tb (number, password,balance,created_at) values (?, ?, ?, ?, now())");
+        Query query = em.createNativeQuery("insert into account_tb (number, password,balance,user_id, created_at) values (?, ?, ?, ?, now())");
         query.setParameter(1, number);
         query.setParameter(2, password);
         query.setParameter(3, balance);
@@ -26,5 +34,38 @@ public class AccountRepository {
         query.setParameter(1, userId);
         return query.getResultList();
     }
+
+    public Account findByNumber(int number) {
+        Query query = em.createNativeQuery("select * from account_tb where number = ?", Account.class);
+        query.setParameter(1, number);
+
+        try {
+            return (Account) query.getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+
+//    public void updateWithdraw(int amount, int number) {
+//        Query query = em.createNativeQuery("update account_tb set balance = balance - ? where number = ?");
+//        query.setParameter(1, amount);
+//        query.setParameter(2, number);
+//        query.executeUpdate();
+//    }
+//
+//    public void updateDeposit(int amount, int number) {
+//        Query query = em.createNativeQuery("update account_tb set balance = balance + ? where number = ?");
+//        query.setParameter(1, amount);
+//        query.setParameter(2, number);
+//        query.executeUpdate();
+//    }
+//
+//    public void updatePassword(String password, int number) {
+//        Query query = em.createNativeQuery("update account_tb set password = ? where number = ?");
+//        query.setParameter(1, password);
+//        query.setParameter(2, number);
+//        query.executeUpdate();
+//    }
 
 }

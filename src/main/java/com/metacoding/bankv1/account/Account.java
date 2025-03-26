@@ -17,7 +17,7 @@ public class Account {
     @Id
     private Integer number; // 계좌번호 PK
     private String password;
-    private String balance; // 잔액
+    private Integer balance; // 잔액
     private Integer userId; // FK
     private Timestamp createdAt; // 생성 날짜 (insert 된 시간)
 }

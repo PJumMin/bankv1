@@ -16,6 +16,30 @@ public class AccountController {
     private final AccountService accountService;
     private final HttpSession session;
 
+    // 계좌이체
+    @PostMapping("/account/transfer")
+    public String transgfer(AccountRequest.TransferDTO transferDTO) {
+        //공통 부가로직
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new RuntimeException("로그인 후 사용해주세요");
+
+        accountService.계좌이체(transferDTO, sessionUser.getId());
+
+        //개발자들 컨벤션 수정이 필요할 때 TODO를 넣음
+        return "redirect:/"; // TODO = detail로 가기
+    }
+
+    // 계좌이체 페이지
+    @GetMapping("/account/transfer-form")
+    public String transferForm() {
+        //공통 부가로직
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new RuntimeException("로그인 후 사용해주세요");
+
+        return "account/transfer-form";
+    }
+
+    // 홈페이지
     @GetMapping("/")
     public String home() {
         return "home";
@@ -40,6 +64,7 @@ public class AccountController {
         return "redirect:/";
     }
 
+    // 계좌목록페이지
     @GetMapping("/account")
     public String account(HttpServletRequest request) {
         // 인증체크 (로그인했는지 체크)
