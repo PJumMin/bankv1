@@ -6,7 +6,9 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -15,6 +17,19 @@ import java.util.List;
 public class AccountController {
     private final AccountService accountService;
     private final HttpSession session;
+
+    // /account/1111?type=입금
+    // 상세페이지
+    @GetMapping("/account/{number}")
+    public String detail(@PathVariable("number") int number, @RequestParam(required = false, defaultValue = "전체") String type) {
+        //공통 부가로직
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new RuntimeException("로그인 후 사용해주세요");
+        System.out.println("number = " + number);
+        System.out.println("type = " + type);
+        accountService.계좌상세보기(number, type, sessionUser.getId());
+        return "account/detail";
+    }
 
     // 계좌이체
     @PostMapping("/account/transfer")

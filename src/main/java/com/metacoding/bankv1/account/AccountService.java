@@ -31,7 +31,7 @@ public class AccountService {
 
         // 2. 입금 계좌 조회, 없으면 RuntimeException
         Account depositAccount = accountRepository.findByNumber(transferDTO.getDepositNumber());
-        if (withdrawAccount == null) throw new RuntimeException("입금계좌가 존재하지 않습니다.");
+        if (depositAccount == null) throw new RuntimeException("입금계좌가 존재하지 않습니다.");
 
         // 3. 출금 계좌에 잔액 검사
         if (withdrawAccount.getBalance() < transferDTO.getAmount()) {
@@ -58,8 +58,17 @@ public class AccountService {
         accountRepository.updateBynumber(depositbalance, depositAccount.getPassword(), depositAccount.getNumber());
 
         // 7. History Save
-        historyRepository.save(transferDTO.getWithdrawNumber(), transferDTO.getDepositNumber(), transferDTO.getAmount(), withdrawbalance);
+        historyRepository.save(transferDTO.getWithdrawNumber(), transferDTO.getDepositNumber(), transferDTO.getAmount(), withdrawbalance, depositbalance);
+    }
 
-
+    public void 계좌상세보기(int number, String type, Integer sessionUserId) {
+        // 1. 계좌 존재 확인
+        Account account = accountRepository.findByNumber(number);
+        if (account == null) throw new RuntimeException("출금계좌가 존재하지 않습니다.");
+        // 2. 계좌 주인 확인
+        if (!(account.getUserId().equals(sessionUserId))) {
+            throw new RuntimeException("해당계좌의 권한이 없습니다.");
+        }
+        // 3. 조회 해서 주기
     }
 }

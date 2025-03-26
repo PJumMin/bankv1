@@ -19,5 +19,6 @@ public class History {
     private Integer depositNumber; // 2222 (FK)
     private Integer amount;
     private Integer withdrawBalance;
+    private Integer depositBalance;
     private Timestamp createdAt; // 생성 날짜 (insert 된 시간)
 }
