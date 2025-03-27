@@ -70,7 +70,7 @@ public class AccountService {
             throw new RuntimeException("해당계좌의 권한이 없습니다.");
         }
         // 3. 조회 해서 주기
-        List<AccountResponse.DetailDTO> detailList = accountRepository.findAllByNumber(number);
+        List<AccountResponse.DetailDTO> detailList = accountRepository.findAllByNumber(number, type);
         return detailList;
     }
 }
